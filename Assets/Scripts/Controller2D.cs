@@ -4,6 +4,8 @@ using System.Collections;
 [RequireComponent (typeof (BoxCollider2D))]
 public class Controller2D : MonoBehaviour {
 
+
+	public LayerMask collisionMask;
 	
 	const float skinwidth = .015f;
 	public int horizontalRayCount = 4;
@@ -17,28 +19,64 @@ public class Controller2D : MonoBehaviour {
 	
 	void Start() {
 		collider = GetComponent<BoxCollider2D>(); 
-	}
-	
-	void Update() {
-		UpdateRaycastOrigins();
+		
 		CalculateRaySpacing ();
 		
-		
-		for (int i =0; i < verticalRayCount; i++) {
-			Debug.DrawRay(raycastOrigins.bottomLeft + Vector2.right * verticalRaySpacing * i, Vector2.up * -2, Color.red);
-		
-		}
-	
 	}
+	
+	
+	
+	
+	
 	
 	public void Move(Vector3 velocity) {
 	
 		
+		UpdateRaycastOrigins();
 		
+		VerticalCollisions (ref velocity);
 		
 		transform.Translate (velocity);
 	
 	}
+	
+	
+	
+	void VerticalCollisions(ref Vector3 velocity) {
+	
+		// moving down is -1, up is +1
+		float directionY = Mathf.Sign (velocity.y);
+		float rayLength = Mathf.Abs (velocity.y) + skinwidth;
+	
+	
+		for (int i =0; i < verticalRayCount; i++) {
+		
+			// want to see which direction we are moving if we are moving down we want our rays to start 
+			// in the  bottom left corner, if we are moving up ray is top left
+			Vector2 rayOrigin = (directionY == -1)?raycastOrigins.bottomLeft:raycastOrigins.topLeft;
+			
+			// e2 6:00
+			rayOrigin += Vector2.right * (verticalRaySpacing * i + velocity.x);
+			
+			RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.up * directionY, rayLength, collisionMask);
+			
+		
+		
+			Debug.DrawRay(raycastOrigins.bottomLeft + Vector2.right * verticalRaySpacing * i, Vector2.up * -2, Color.red);
+			
+			// e2 : 8.30
+			if (hit) {
+				velocity.y = (hit.distance - skinwidth) * directionY;
+				rayLength = hit.distance;
+			
+			}
+			
+			
+			
+			
+		}
+	}
+	
 	
 	
 	void UpdateRaycastOrigins() {
