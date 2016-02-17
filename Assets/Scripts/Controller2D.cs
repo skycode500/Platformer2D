@@ -146,6 +146,12 @@ public class Controller2D : MonoBehaviour {
 				rayLength = hit.distance;
 			
 			
+				// E4- 16.30 Fix collision above player
+				if (collisions.climbingSlope) {
+					velocity.x = velocity.y  / Mathf.Tan(collisions.slopeAngle * Mathf.Deg2Rad) * Mathf.Sign(velocity.x);
+				}
+			
+			
 				collisions.below = directionY == -1;
 				collisions.above = directionY == 1;
 			
