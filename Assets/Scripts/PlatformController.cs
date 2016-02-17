@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlatformController : RaycastController {
 
@@ -24,6 +25,8 @@ public class PlatformController : RaycastController {
 	
 	void MovePassengers(Vector3 velocity) {
 	
+		HashSet<Transform> movedPassengers = new HashSet<Transform> ();
+	
 		float directionX = Mathf.Sign (velocity.x);
 		float directionY = Mathf.Sign (velocity.y);
 		
@@ -38,13 +41,15 @@ public class PlatformController : RaycastController {
 				RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.up * directionY, rayLength, passengerMask);
 				
 			
-				
 				// e6 - 10
 				if (hit) {
-					float pushX = (directionX == 1)?velocity.x:0;
-					float pushY = velocity.y - (hit.distance - skinwidth) * directionY;
-					
-					hit.transform.Translate(new Vector3(pushX, pushY);
+					if (!movedPassengers.Contains(hit.transform)) {
+						movedPassengers.Add(hit.transform);
+						float pushX = (directionX == 1)?velocity.x:0;
+						float pushY = velocity.y - (hit.distance - skinwidth) * directionY;
+						
+						hit.transform.Translate(new Vector3(pushX, pushY);
+					}
 					
 				}	
 				
