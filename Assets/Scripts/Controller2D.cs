@@ -142,10 +142,7 @@ public class Controller2D : MonoBehaviour {
 		
 		float climbVelocityY =  Mathf.Sin (slopeAngle * Mathf.Deg2Rad) * moveDistance;
 		
-		if (velocity.y > climbVelocityY) {
-			print("Jumping on slope");
-		}
-		else {
+		if (velocity.y <= climbVelocityY) {
 			velocity.y = climbVelocityY;
 			velocity.x = Mathf.Cos(slopeAngle * Mathf.Deg2Rad) * moveDistance * Mathf.Sign(velocity.x);
 			collisions.below = true;
