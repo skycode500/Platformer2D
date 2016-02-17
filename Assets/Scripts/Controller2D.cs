@@ -40,6 +40,8 @@ public class Controller2D : MonoBehaviour {
 		
 		collisions.Reset();
 		
+		collisions.velocityOld = velocity;
+		
 		
 		if (velocity.y < 0) {
 			DescendSlope(ref velocity);
@@ -83,6 +85,13 @@ public class Controller2D : MonoBehaviour {
 				float slopeAngle = Vector2.Angle(hit.normal, Vector2.up);
 				
 				if (i == 0 && slopeAngle <= maxClimbAngle) {
+				
+					// e5 13 - fix bug
+					if (collisions.descendingSlope) {
+						collisions.descendingSlope = false;
+						velocity = collisions.velocityOld;
+					}
+				
 				
 					// E4 - 12
 					float distanceToSlopeStart = 0;
@@ -267,6 +276,7 @@ public class Controller2D : MonoBehaviour {
 		public bool climbingSlope;
 		public bool descendingSlope;
 		public float slopeAngle, slopeAngleOld;
+		public Vector3 velocityOld;
 		
 		public void Reset() {
 			above = below = false;
