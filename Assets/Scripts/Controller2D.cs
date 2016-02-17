@@ -11,6 +11,8 @@ public class Controller2D : MonoBehaviour {
 	public int horizontalRayCount = 4;
 	public int verticalRayCount = 4;
 	
+	float maxClimbAngle = 80;
+	
 	float horizontalRaySpacing;
 	float verticalRaySpacing;
 	
@@ -74,8 +76,8 @@ public class Controller2D : MonoBehaviour {
 				
 				float slopeAngle = Vector2.Angle(hit.normal, Vector2.up);
 				
-				if (i == 0) {
-					print (slopeAngle);
+				if (i == 0 && slopeAngle <= maxClimbAngle) {
+					ClimbSlope(ref velocity, slopeAngle);
 				}
 			
 			
@@ -134,6 +136,12 @@ public class Controller2D : MonoBehaviour {
 		}
 	}
 	
+	
+	void ClimbSlope(ref Vector3 velocity, float slopeAngle) {
+		float moveDistance = Mathf.Abs (velocity.x);
+		velocity.y = Mathf.Sin (slopeAngle * Mathf.Deg2Rad) * moveDistance;
+		velocity.x = Mathf.Cos(slopeAngle * Mathf.Deg2Rad) * moveDistance * Mathf.Sign(velocity.x);
+	}
 	
 	
 	
