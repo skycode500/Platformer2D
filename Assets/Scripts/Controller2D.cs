@@ -65,6 +65,13 @@ public class Controller2D : RaycastController {
 			Debug.DrawRay(rayOrigin, Vector2.right * directionX * rayLength, Color.red);
 			
 			if (hit) {
+			
+			
+				if (hit.distance == 0) {
+					continue;
+				}
+			
+			
 				
 				float slopeAngle = Vector2.Angle(hit.normal, Vector2.up);
 				
