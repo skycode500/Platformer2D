@@ -9,6 +9,7 @@ public class PlatformController : RaycastController {
 	public Vector3 move;
 	
 	List<PassengerMovement> passengerMovement;
+	Dictionary<Transform, Controller2D> passengerDictionary = new Dictionary<Transform, Controller2D>();
 	
 	public override void Start () {
 		base.Start();
@@ -36,8 +37,12 @@ public class PlatformController : RaycastController {
 	
 	void MovePassengers(bool beforeMovePlatform) {
 		foreach (PassengerMovement passenger in passengerMovement) {
+	
+			if(!passengerDictionary.ContainsKey(passenger.transform)) {
+				passengerDictionary.Add(passenger.transform, passenger.transform.GetComponent<Controller2D>());
+			}
 			if (passenger.moveBeforePlatform == beforeMovePlatform) {
-				passenger.transform.GetComponent<Controller2D>().Move(passenger.velocity, passenger.standingOnPlatform);	
+				passengerDictionary[passenger.transform].Move(passenger.velocity, passenger.standingOnPlatform);	
 			}	
 		}
 	}
