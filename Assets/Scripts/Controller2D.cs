@@ -16,6 +16,8 @@ public class Controller2D : MonoBehaviour {
 	
 	BoxCollider2D collider;
 	RaycastOrigins raycastOrigins;
+	public CollisionInfo collisions;
+	
 	
 	void Start() {
 		collider = GetComponent<BoxCollider2D>(); 
@@ -32,6 +34,8 @@ public class Controller2D : MonoBehaviour {
 	public void Move(Vector3 velocity) {
 	
 		UpdateRaycastOrigins();
+		
+		collisions.Reset();
 		
 		if (velocity.x != 0) {
 			HorizontalCollisions (ref velocity);
@@ -69,6 +73,12 @@ public class Controller2D : MonoBehaviour {
 				velocity.x = (hit.distance - skinwidth) * directionX;
 				rayLength = hit.distance;
 				
+				
+				// if we hit something and collisions.left is true
+				collisions.left = directionX == -1;
+				collisions.right = directionX == 1;
+				
+				
 			}
 			
 			
@@ -104,6 +114,10 @@ public class Controller2D : MonoBehaviour {
 			if (hit) {
 				velocity.y = (hit.distance - skinwidth) * directionY;
 				rayLength = hit.distance;
+			
+			
+				collisions.below = directionY == -1;
+				collisions.above = directionY == 1;
 			
 			}
 			
@@ -148,7 +162,23 @@ public class Controller2D : MonoBehaviour {
 	
 	}
 	
+	public struct CollisionInfo {
+		public bool above, below;
+		public bool left, right;
+		
+		public void Reset() {
+			above = below = false;
+			left = right = false;
+		
+		
+		}
 	
+	
+	
+	
+	
+	
+	}
 	
 	
 	
