@@ -48,7 +48,7 @@ public class PlatformController : RaycastController {
 						float pushX = (directionX == 1)?velocity.x:0;
 						float pushY = velocity.y - (hit.distance - skinwidth) * directionY;
 						
-						hit.transform.Translate(new Vector3(pushX, pushY);
+						hit.transform.Translate(new Vector3(pushX, pushY));
 					}
 					
 				}	
