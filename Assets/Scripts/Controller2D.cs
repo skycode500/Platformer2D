@@ -72,23 +72,26 @@ public class Controller2D : MonoBehaviour {
 			Debug.DrawRay(rayOrigin, Vector2.right * directionX * rayLength, Color.red);
 			
 			if (hit) {
-			
 				
 				float slopeAngle = Vector2.Angle(hit.normal, Vector2.up);
 				
 				if (i == 0 && slopeAngle <= maxClimbAngle) {
 					ClimbSlope(ref velocity, slopeAngle);
 				}
-			
-			
-			
-				velocity.x = (hit.distance - skinwidth) * directionX;
-				rayLength = hit.distance;
 				
+			
+				// Don't check for collisions when you are climbing the slope
+				if (!collisions.climbingSlope || slopeAngle > maxClimbAngle ) {
+			
+					velocity.x = (hit.distance - skinwidth) * directionX;
+					rayLength = hit.distance;
+					
+					
+					// if we hit something and collisions.left is true
+					collisions.left = directionX == -1;
+					collisions.right = directionX == 1;
 				
-				// if we hit something and collisions.left is true
-				collisions.left = directionX == -1;
-				collisions.right = directionX == 1;
+				}
 				
 				
 			}
@@ -146,6 +149,8 @@ public class Controller2D : MonoBehaviour {
 			velocity.y = climbVelocityY;
 			velocity.x = Mathf.Cos(slopeAngle * Mathf.Deg2Rad) * moveDistance * Mathf.Sign(velocity.x);
 			collisions.below = true;
+			collisions.climbingSlope = true;
+			collisions.slopeAngle = slopeAngle;
 		}
 	}
 	
@@ -191,11 +196,15 @@ public class Controller2D : MonoBehaviour {
 		public bool left, right;
 		
 		public bool climbingSlope;
+		public float slopeAngle, slopeAngleOld;
 		
 		public void Reset() {
 			above = below = false;
 			left = right = false;
 			climbingSlope = false;
+			
+			slopeAngleOld = slopeAngle;
+			slopeAngle = 0;
 		}
 	
 	
