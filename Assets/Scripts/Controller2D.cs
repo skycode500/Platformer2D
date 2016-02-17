@@ -15,7 +15,7 @@ public class Controller2D : RaycastController {
 	}
 	
 	
-	public void Move(Vector3 velocity) {
+	public void Move(Vector3 velocity, bool standingOnPlatform = false) {
 	
 		UpdateRaycastOrigins();
 		
@@ -37,8 +37,11 @@ public class Controller2D : RaycastController {
 			VerticalCollisions (ref velocity);
 		}
 		
-		
 		transform.Translate (velocity);
+		
+		if (standingOnPlatform) {
+			collisions.below = true;
+		}
 	
 	}
 	
