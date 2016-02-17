@@ -26,8 +26,14 @@ public class Player : MonoBehaviour {
 	void Update() {
 	
 	
-		Vector2 input = new Vector2 (Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 	
+		// Prevent player from accumulating gravity when on the ground
+		if (controller.collisions.above || controller.collisions.below) {
+			velocity.y = 0;
+		}
+	
+	
+		Vector2 input = new Vector2 (Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 	
 		velocity.x = input.x * moveSpeed;
 		
