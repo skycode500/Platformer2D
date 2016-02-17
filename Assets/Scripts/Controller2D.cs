@@ -95,6 +95,12 @@ public class Controller2D : MonoBehaviour {
 					velocity.x = (hit.distance - skinwidth) * directionX;
 					rayLength = hit.distance;
 					
+					// E4- 15, Fix collisions when obstable is side by side with player on slope
+					if (collisions.climbingSlope) {
+						velocity.y = Mathf.Tan(collisions.slopeAngle * Mathf.Deg2Rad) * Mathf.Abs(velocity.x);
+					}
+					
+					
 					
 					// if we hit something and collisions.left is true
 					collisions.left = directionX == -1;
