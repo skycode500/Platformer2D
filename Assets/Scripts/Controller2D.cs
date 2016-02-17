@@ -31,15 +31,51 @@ public class Controller2D : MonoBehaviour {
 	
 	public void Move(Vector3 velocity) {
 	
-		
 		UpdateRaycastOrigins();
 		
-		VerticalCollisions (ref velocity);
+		if (velocity.x != 0) {
+			HorizontalCollisions (ref velocity);
+		}
+		
+		if (velocity.y != 0) {
+			VerticalCollisions (ref velocity);
+		}
+		
 		
 		transform.Translate (velocity);
 	
 	}
 	
+	void HorizontalCollisions(ref Vector3 velocity) {
+		
+		float directionX = Mathf.Sign (velocity.x);
+		float rayLength = Mathf.Abs (velocity.x) + skinwidth;
+		
+		
+		for (int i =0; i < horizontalRayCount; i++) {
+			
+			
+			Vector2 rayOrigin = (directionX == -1)?raycastOrigins.bottomLeft:raycastOrigins.bottomRight;
+			
+			rayOrigin += Vector2.up * (horizontalRaySpacing * i);
+			
+			RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.right * directionX, rayLength, collisionMask);
+			
+			
+			
+			Debug.DrawRay(rayOrigin, Vector2.right * directionX * rayLength, Color.red);
+			
+			if (hit) {
+				velocity.x = (hit.distance - skinwidth) * directionX;
+				rayLength = hit.distance;
+				
+			}
+			
+			
+			
+			
+		}
+	}
 	
 	
 	void VerticalCollisions(ref Vector3 velocity) {
@@ -62,7 +98,7 @@ public class Controller2D : MonoBehaviour {
 			
 		
 		
-			Debug.DrawRay(raycastOrigins.bottomLeft + Vector2.right * verticalRaySpacing * i, Vector2.up * -2, Color.red);
+			Debug.DrawRay(rayOrigin, Vector2.up * directionY * rayLength, Color.red);
 			
 			// e2 : 8.30
 			if (hit) {
@@ -71,11 +107,9 @@ public class Controller2D : MonoBehaviour {
 			
 			}
 			
-			
-			
-			
 		}
 	}
+	
 	
 	
 	
