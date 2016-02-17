@@ -70,6 +70,16 @@ public class Controller2D : MonoBehaviour {
 			Debug.DrawRay(rayOrigin, Vector2.right * directionX * rayLength, Color.red);
 			
 			if (hit) {
+			
+				
+				float slopeAngle = Vector2.Angle(hit.normal, Vector2.up);
+				
+				if (i == 0) {
+					print (slopeAngle);
+				}
+			
+			
+			
 				velocity.x = (hit.distance - skinwidth) * directionX;
 				rayLength = hit.distance;
 				
