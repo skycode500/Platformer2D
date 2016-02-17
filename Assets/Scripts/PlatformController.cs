@@ -33,7 +33,7 @@ public class PlatformController : RaycastController {
 		// Vertically moving platform 
 		// e6 - 8
 		if (velocity.y != 0) {
-			float rayLength = Mathf.Abs (velocity.y) + skinwidth;
+			float rayLength = Mathf.Abs (velocity.y) + skinWidth;
 				
 			for (int i =0; i < verticalRayCount; i++) {
 				Vector2 rayOrigin = (directionY == -1)?raycastOrigins.bottomLeft:raycastOrigins.topLeft;
@@ -46,7 +46,7 @@ public class PlatformController : RaycastController {
 					if (!movedPassengers.Contains(hit.transform)) {
 						movedPassengers.Add(hit.transform);
 						float pushX = (directionX == 1)?velocity.x:0;
-						float pushY = velocity.y - (hit.distance - skinwidth) * directionY;
+						float pushY = velocity.y - (hit.distance - skinWidth) * directionY;
 						
 						hit.transform.Translate(new Vector3(pushX, pushY));
 					}
